@@ -1,0 +1,108 @@
+---
+# This playbook is use to install kubernetes with kubeadm on centos7
+# It should be easy to use this ansible playbook on empty centos7 machine with few modifications
+# It should no be so difficult to make it works on other linux system
+# see https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
+- hosts: all
+  become: yes
+  tasks:
+    - name: add new node to /etc/hosts
+      blockinfile:
+        path: /etc/hosts
+        block: |
+          172.42.42.100 kmaster.example.com kmaster
+          172.42.42.101 kworker1.example.com kworker1
+          172.42.42.102 kworker2.example.com kworker2
+    - name: Install utils tools for docker
+      yum:
+        name:
+          - yum-utils
+          - device-mapper-persistent-data
+          - lvm2
+        state: present
+    - name: adding repository for docker
+      get_url:
+        url: https://download.docker.com/linux/centos/docker-ce.repo
+        dest: /etc/yum.repos.d/docer-ce.repo
+      become: yes
+    - name: Install docker
+      yum:
+        name: docker-ce
+        state: present
+    - name: Creating /etc/docker directory
+      file:
+        path: /etc/docker
+        state: directory
+    - name: Creating /etc/systemd/system/docker.service.d directory
+      file:
+        path: /etc/systemd/system/docker.service.d
+        state: directory
+    - name: configuring docker
+      copy:
+        dest: /etc/docker/deamon.json
+        content: |
+          {
+            "exec-opts": ["native.cgroupdriver=systemd"],
+            "log-driver": "json-file",
+            "log-opts": {
+              "max-size": "100m"
+            },
+            "storage-driver": "overlay2",
+            "storage-opts": [
+              "overlay2.override_kernel_check=true"
+            ]
+          }
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: y
+    - name: Add user vagrant to docker group
+      user:
+        name: vagrant
+        groups: docker
+        append: yes
+#    - name: Ensure iptables tooling does not use the nftables backend
+#    centos7 is not using fstab
+#    centos8 use fstab but can't update to iptables. so centos8 is not compatible with kubeapdm
+#    on Debian 10 (Buster), Ubuntu 19.04, Fedora 29 and newer releases of these distributions
+#    you need to use iptable. see https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
+    - name: desactivate SELinux
+      shell: |
+        setenforce 0
+        sed -i --follow-symlinks 's/^SELINUX=enforcing/SELINUX=disabled/' /etc/sysconfig/selinux
+    - name: desactivate swap
+      shell: |
+        sed -i '/swap/d' /etc/fstab
+        swapoff -a
+    - name: create the kubernetes service
+      copy:
+        dest: /etc/sysctl.d/kubernetes.conf
+        content: |
+          net.bridge.bridge-nf-call-ip6tables = 1
+          net.bridge.bridge-nf-call-iptables = 1
+    - name: update sysctl
+      shell: sysctl --system
+    - name: add kubernetes repo
+      copy:
+        dest: /etc/yum.repos.d/kubernetes.repo
+        content: |
+          [kubernetes]
+          name=Kubernetes
+          baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+          enabled=1
+          gpgcheck=1
+          repo_gpgcheck=1
+          gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+    - name: install kubernetes
+      yum:
+        name:
+          - kubeadm
+          - kubelet
+          - kubectl
+        state: present
+    - name: Start kubelet service
+      service:
+        name: kubelet
+        state: started
+        enabled: y

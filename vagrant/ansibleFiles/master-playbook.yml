@@ -1,0 +1,30 @@
+---
+- hosts: all
+  become: no
+  tasks:
+    - name: Executing kubeadm
+      become: true
+      become_method: sudo
+      shell: kubeadm init --apiserver-advertise-address={{ node_ip }} --pod-network-cidr=192.168.0.0/16
+    - name: create .kube directory
+      file:
+        path: /home/vagrant/.kube
+        state: directory
+    - name: Copy kubectl config file
+      become: true
+      become_method: sudo
+      shell: |
+        cp -i /etc/kubernetes/admin.conf /home/vagrant/.kube/config
+        chown vagrant:vagrant /home/vagrant/.kube/config
+    - name: Deploy Calico network
+      shell: kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+    - name: Generate join command
+      command: kubeadm token create --print-join-command
+      register: join_command
+    - name: Copy join command to local file
+      local_action: copy content="{{ join_command.stdout_lines[0] }}" dest="./join-command"
+  handlers:
+    - name: docker status
+      service: name=docker state=started
+    - name: kubelet status
+      service: name=kubelet state=started
