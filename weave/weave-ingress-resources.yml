@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: weave-ingress-controller
+  namespace: weave
+  annotations:
+    nginx.org/rewrites: "serviceName=weave rewrite=/"
+spec:
+  rules:
+    - host: kubernetes.example.com
+      http:
+        paths:
+          - path: /weave
+            backend:
+              serviceName: weave-service
+              servicePort: 4040
