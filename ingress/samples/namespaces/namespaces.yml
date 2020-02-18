@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ingress-test-1
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ingress-test-2
