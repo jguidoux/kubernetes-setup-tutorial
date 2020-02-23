@@ -23,7 +23,7 @@ We don't have this entry point yet.
 We will need to add a load balencer. 
 We will use `MetalLB` which is easy to install.
 
-## Installatinn of the Nginx Ingress Controller
+## Install the Nginx Ingress Controller
 
 Many tools can be used for the ingress controller :
 * nginx
@@ -60,7 +60,7 @@ kubectl get svc -n ingress-nginx
 You should have a result like this:
 ```shell script
 NAME            TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)                      AGE
-ingress-nginx   LoadBalancer   10.105.44.159   pending   80:31695/TCP,443:30977/TCP   11h
+ingress-nginx   LoadBalancer   10.105.44.159   <pending>   80:31695/TCP,443:30977/TCP   11h
 ```
 We will need an external IP to access the ingress controller. 
 But, it won't come becaude there is no load balancer
@@ -108,7 +108,7 @@ data:
     - name: default
       protocol: layer2
       addresses:
-      - 172.42.42.200-192.168.1.250
+      - 172.42.42.200-172.42.42.210
 ```
 Then let's create the `ConfigMap`.
 ```shell script
@@ -224,7 +224,7 @@ spec:
 We can add another path for the `blue-svc`. Look the file: `ingress/samples/ingress/ingress-test-1.yml`.
 Let's deploy our new `Ingress` Resource.
 ```yaml
-kubectl create -f ingress/ingress-test-1.yml
+kubectl create -f ingress/samples/ingress/ingress-test-1.yml
 ``` 
 And chech that the urls `http://kubernetes.example.com/nginx` and `http://kubernetes.example.com/blue`
 have the expected behavior.
@@ -232,7 +232,7 @@ have the expected behavior.
 The file `kubectl create -f ingress/ingress-test-2.yml` configure the route for the `green`
 application in the `ingress-test-2` namespace:
 ```yaml
-kubectl create -f ingress/ingress-test-2.yml
+kubectl create -f ingress/samples/ingress/ingress-test-2.yml
 ```
 And chech that the urls `http://kubernetes.example.com/green`
 have the expected behavior.

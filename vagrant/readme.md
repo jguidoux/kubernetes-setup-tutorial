@@ -35,11 +35,6 @@ The kubernetes cluster is simple and is only composed of 3 nodes.
  
 ## Deploying the claster
 
-Using Vagrant and Ansible we will develop a one master node kubernetes cluster with 2 workers node.
-Cloning the repository
-````shell script
-git clone ...
-````
 Go to the `vagrant/` directory and execute vagrant.
 ```shell script
 vagrant up
@@ -62,7 +57,7 @@ Kubectl is the main tool to manipulate a kubernetes cluster using command line.
 ```
 3. Create a `.kube` directory on you user home
 ```shell script
-mkidr -p $HOME/.kube
+mkdir -p $HOME/.kube
 ``` 
 (if this directory exist, remove everything existing inside)
 4. Copy from the master node the file `$HOME/.kube/config`

@@ -3,8 +3,13 @@ kind: Ingress
 metadata:
   name: weave-ingress-controller
   namespace: weave
+  labels:
+    app: weave-ingress
   annotations:
-    nginx.org/rewrites: "serviceName=weave rewrite=/"
+    kubernetes.io/ingress.class: "nginx"
+    nginx.org/mergeable-ingress-type: "minion"
+    nginx.org/websocket-services: "weave-scope-app"
+    nginx.org/rewrites: "serviceName=weave-scope-app rewrite=/"
 spec:
   rules:
     - host: kubernetes.example.com
@@ -12,5 +17,5 @@ spec:
         paths:
           - path: /weave
             backend:
-              serviceName: weave-service
+              serviceName: weave-scope-app
               servicePort: 4040
