@@ -7,7 +7,7 @@ This repository is a learning tool and not a cookbook to create a production rea
 
 ## Contents
 
-* Creating an empty single master node kubernetes node. [See the readme](vagrant/readme.md)
-* Adding a Dashboard. [See the readme](dashboard/readme.md)
-* Adding an Ingress controller [See the readme](ingress/readme.md)
+* Creating an empty single master node kubernetes node. [See the readme](vagrant/README.md)
+* Adding a Dashboard. [See the readme](dashboard/README.md)
+* Adding an Ingress controller [See the readme](ingress/README.md)
 
