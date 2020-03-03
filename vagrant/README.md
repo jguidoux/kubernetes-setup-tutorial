@@ -19,7 +19,7 @@ I use Kubeadm to deploy kubernetes. Kubeadm can be used in these OS
 *  HypriotOS v1.0.1+
 *  Container Linux (tested with 1800.6.0)
 
-## Prerequisites
+## Prerequisites
 
 * Install [Virtualbox](https://www.virtualbox.org/wiki/Linux_Downloads)
 * Install [Vagrant](https://www.vagrantup.com/docs/installation/)
@@ -57,6 +57,7 @@ Kubectl is the main tool to manipulate a kubernetes cluster using command line.
 mkdir -p ~/.kube
 ``` 
 (if this directory exist, remove everything existing inside)
+
 4. Copy from the master node the file `~/.kube/config`
 ```shell script
 vagrant scp kmaster:.kube/config ~/.kube/
