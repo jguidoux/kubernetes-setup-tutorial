@@ -189,6 +189,7 @@ spec:
           args:
             - --ip-masq
             - --kube-subnet-mgr
+            # Ceci est à neccaisre uniquement pour fonctionner avec vagrant
             - --iface=eth1
           resources:
             requests:

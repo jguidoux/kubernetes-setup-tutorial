@@ -5,7 +5,8 @@
     - name: Executing kubeadm
       become: true
       become_method: sudo
-      # for using Flannel 
+      # for using Flannel for internal avi_network
+      # internal network tools are listed here : https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/
       shell: kubeadm init --apiserver-advertise-address={{ node_ip }} --pod-network-cidr=10.244.0.0/16
       # for using Calico
       # shell: kubeadm init --apiserver-advertise-address={{ node_ip }} --pod-network-cidr=192.168.0.0/16
