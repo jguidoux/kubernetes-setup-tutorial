@@ -2,8 +2,7 @@
 
 ## Objective
 
-Adding the kubernetes UI to the cluster. 
-Complete documentation can be found [here](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/)
+Adding the kubernetes UI to the cluster. The complete documentation can be found [here](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/)
 
 ## Installation
 
@@ -11,9 +10,7 @@ Install the kubernetes UI
 ```shell script
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended.yaml
 ```
-the kubernetes UI is secured with Role Bases Access Control (rbac).
-We will add the authorization. To follow [the official documentation](https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/creating-sample-user.md),
-we will create an `admin-user` which will be authorize to access to the dashboard.
+the kubernetes UI is secured with Role Bases Access Control (rbac). Add add the authorization. To follow [the official documentation](https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/creating-sample-user.md), You will create an `admin-user` which will be authorize to access to the dashboard.
 
 __IMPORTANT__: Make sure that you know what you are doing before proceeding. Granting admin privileges to Dashboard's Service Account might be a security risk. 
 
@@ -25,23 +22,17 @@ Now let's find the generated token from the secret.
 ```shell script
 kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
 ```
-The documentation warn that we should be really careful to expose the dashboard.
-Exposing the dashboard can exposed to security issues for all the cluster.
-The recommanded safe methode to access the dashboard is to use the [kubectl proxy](https://kubernetes.io/docs/tasks/access-kubernetes-api/http-proxy-access-api/).
+The documentation warn you that we should be really careful to expose the dashboard. Exposing the dashboard can exposed to security issues for all the cluster. The recommanded safe methode to access the dashboard is to use the [kubectl proxy](https://kubernetes.io/docs/tasks/access-kubernetes-api/http-proxy-access-api/).
 ```shell script
 kubectl proxy
 ```
-Now you can access to the dashboard with this url : http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/.
-You shoud see this screen : 
+Now you can access to the dashboard with this url: http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/. You shoud see this screen : 
 ![dashboard login page](images/dashboard-login.png)
 
-* Choose the toten options and past the previous token
-You should have access to the dashboard.
+* Choose the token options and past the previous token. You should have access to the dashboard.
 
 ## Adding metrics
-You have access to the dashboard. But it miss the metrics.
-To add the metrics, we need to add the `metrics-server`.
-You can find the documentation [here](https://kubernetes.io/docs/tasks/debug-application-cluster/resource-metrics-pipeline/)
+You have access to the dashboard. But it misses the metrics. To add the metrics, we need to add the `metrics-server`. You can find the documentation [here](https://kubernetes.io/docs/tasks/debug-application-cluster/resource-metrics-pipeline/)
 and [here](https://github.com/kubernetes-sigs/metrics-server)
 
 Fisrt, let's test if the `metrics-server` is already installed or not.
@@ -51,27 +42,25 @@ kubectl top node
 ```
 If the reponse is something like:
 ```shell script
-NAME                   STATUS   ROLES    AGE     VERSION
-kmaster.example.com    Ready    master   2d16h   v1.17.3
-kworker1.example.com   Ready    <none>   2d16h   v1.17.3
-kworker2.example.com   Ready    <none>   2d16h   v1.17.3
+NAME                CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%   
+kmaster.example.com   145m         14%    1198Mi           66%       
+kworker1.example.com   26m          2%     966Mi           54%       
+kworker2.example.com   30m          3%     975Mi           54% 
 ```
-It means that the `metrics-server` is already installed.
-If node, we will need to install it.
+This means that the `metrics-server` is already installed. If not, you will need to install it.
 
 1. Clone the `metrics-server` git repository.
 ```shell script
 https://github.com/kubernetes-sigs/metrics-server.git
 ```
-Unfortunately you will have to edit the file `deploy/kubernetes/metrics-server-deployment.yaml
-`. Add this in the `args` of the container:
+Unfortunately you will have to edit the file `deploy/kubernetes/metrics-server-deployment.yaml`. Add this in the `args` of the container:
 ```yaml
           - /metrics-server
           - --kubelet-insecure-tls
           - --kubelet-preferred-address-types=InternalIP
 
 ```
-now your file should look something like:
+now your file should looks something like:
 ```yaml
       containers:
       - name: metrics-server
@@ -95,12 +84,12 @@ From the root directory of the `metrics-server` repository.
 You will have probably have to wait around 1 minute before having metrics.
 Try this command:
 ```mysql based
-kubectl get node
+kubectl top node
 ```
 Or:
 ```shell script
-kubectl get pod
+kubectl top pod
 ```
-If it display metrics. It means that the `metrics-server` is installed correctly.
+If it display metrics. It means that the `metrics-server` is correctly installed.
 Now you can go back to the Dashboard UI. Metrics should be displayed.
 ![Dashboard overview](images/dashboard+overview.png)
