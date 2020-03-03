@@ -1,6 +1,7 @@
-# Kubernetes helper.
+# Kubernetes helper
 
 ## Objectives
+
 The objectives of this repository is to give keys to setup a kubernetes cluster.
 It is destiny to person who whish to learn how to setup a basic kubernetes cluster.
 This repository is a learning tool and not a cookbook to create a production ready kubernetes cluster. 
