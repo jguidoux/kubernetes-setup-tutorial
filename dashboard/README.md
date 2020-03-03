@@ -31,7 +31,7 @@ Now you can access to the dashboard with this url: http://localhost:8001/api/v1
 
 * Choose the token options and past the previous token. You should have access to the dashboard.
 
-## Adding metrics
+## Adding metrics
 You have access to the dashboard. But it misses the metrics. To add the metrics, we need to add the `metrics-server`. You can find the documentation [here](https://kubernetes.io/docs/tasks/debug-application-cluster/resource-metrics-pipeline/)
 and [here](https://github.com/kubernetes-sigs/metrics-server)
 
