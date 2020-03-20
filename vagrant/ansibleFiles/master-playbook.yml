@@ -29,7 +29,7 @@
       #   otherwise she the local one
     - name: Deploy Flannel network
       #  shell: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-      shell: kubectl apply -f kube-flannel-vagrant.yml
+      shell: kubectl apply -f /vagrant/kube-flannel-vagrant.yml
     - name: Generate join command
       command: kubeadm token create --print-join-command
       register: join_command
