@@ -1,15 +1,15 @@
 # A more realistic sample
 
 With this sample, we will setup an app composed of many pods. with 2 backend and 1 frontend.
-The sample is baseed on this [page](https://www.freecodecamp.org/news/learn-kubernetes-in-under-3-hours-a-detailed-guide-to-orchestrating-containers-114ff420e882/).
+The sample is based on this [page](https://www.freecodecamp.org/news/learn-kubernetes-in-under-3-hours-a-detailed-guide-to-orchestrating-containers-114ff420e882/).
 This page help you to learn kubernetes in 3 hours.
 I advice you to follow the tutorial of this page.
 
-This is just the last stop of this tutorial adapted to our cluster.
+This, is just the last step of this tutorial adapted to our cluster.
 
 ## Description
 
-The application is a simple webapp which calculate the "sentiment" of the sentence.
+The application is a simple webapp which calculate the "sentiment" of one sentence.
 The application is composed of 3 part:
 - The UI in vue.js in an Nginx server
 - The backend which is a a spring-boot application provided a Rest API
