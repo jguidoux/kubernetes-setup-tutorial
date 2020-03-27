@@ -62,6 +62,13 @@ mkdir -p ~/.kube
 ```shell script
 vagrant scp kmaster:.kube/config ~/.kube/
 ```
+
+( If you don't have `vagrant-scp`, please install the plugin vagarant-scp:
+ ```bash
+vagrant plugin install vagrant-scp
+ ```
+)
+
 Now we should be able to test the cluster.
 
 ````shell script
